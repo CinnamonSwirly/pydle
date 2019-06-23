@@ -42,6 +42,7 @@ def stop():
 
 
 # A function to increase the modifier variable and make the counter go up faster.
+# TODO: Accept arguments
 def increase():
     global modifier
     modifier += 1
@@ -49,6 +50,7 @@ def increase():
 
 # A function to decrease the modifier variable and make the counter go up slower.
 # The function won't let the modifier variable go below zero.
+# TODO: Accept arguments
 def decrease():
     global modifier
     if modifier >= 1:
@@ -57,9 +59,14 @@ def decrease():
         print('Cannot decrease the increment below 0!')
 
 
+# A function that will list all commands available in the dictionary commands
+def get_help():
+    for entry in help_explanations:
+        print(entry)
+
+
 # A function that will get the user's input and, if the input matches a command, executes the command.
 # The function collects user arguments as anything past the first word and passes the whole list to the function called.
-# TODO: Create a help command to list all commands
 def get_input():
     print("Enter a command: ")
     command = input().split()
@@ -78,8 +85,18 @@ commands = {
     "check": check,
     "exit": stop,
     "increase": increase,
-    "decrease": decrease
+    "decrease": decrease,
+    "help": get_help
 }
+
+# A list based on the command dictionary that gives short descriptions of the commands available.
+help_explanations = [
+    "check: check on the current counter.",
+    "exit: exit the program",
+    "increase: increase the increment of the counter",
+    "decrease: decrease the increment of the counter",
+    "help: what you\'re looking at right now"
+]
 
 # Create the threads
 ModifierThread = Modifier(1, "Modifier")
