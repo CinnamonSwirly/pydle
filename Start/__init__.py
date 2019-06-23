@@ -35,11 +35,13 @@ def inquire():
 
 
 # Create the threads
-CounterThread = Counter(1, "Counter")
-ModifierThread = Modifier(2, "Modifier")
-# Start the threads
-CounterThread.start()
+ModifierThread = Modifier(1, "Modifier")
+CounterThread = Counter(2, "Counter")
+
+# Start the threads - Modifier must start first to define the counter increment
 ModifierThread.start()
+CounterThread.start()
+
 # Let the user choose before checking on the counter
 while True:
     input('Press enter to check on the counter...')
