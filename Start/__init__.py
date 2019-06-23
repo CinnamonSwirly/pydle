@@ -1,5 +1,6 @@
 import threading
 import time
+import os
 
 
 # Let's make a thread class that will run our main counter
@@ -30,9 +31,30 @@ class Modifier(threading.Thread):
 
 
 # A simple function to check what our counter is at.
-def inquire():
+def check():
     print(store)
 
+
+# A function to stop the program when called.
+def stop():
+    os._exit(1)
+
+
+# A function that will get the user's input and, if the input matches a command, executes the command.
+def get_input():
+    print("Enter a command:")
+    command = input().split()
+    if command[0] in commands:
+        commands[command[0]]()
+    else:
+        print("Command not found. Please try again")
+
+
+# A dictionary that gives us a list of references to functions
+commands = {
+    "check": check,
+    "exit": stop
+}
 
 # Create the threads
 ModifierThread = Modifier(1, "Modifier")
@@ -44,5 +66,4 @@ CounterThread.start()
 
 # Let the user choose before checking on the counter
 while True:
-    input('Press enter to check on the counter...')
-    inquire()
+    get_input()
