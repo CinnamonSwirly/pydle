@@ -42,10 +42,10 @@ class ModifyCounter:
     def increase(self, arguments):
         global modifier
         if arguments is None:
-            modifier += 1
+            self.modify(1)
         else:
             try:
-                modifier += int(arguments[0])
+                self.modify(int(arguments[0]))
             except ValueError:
                 print("Invalid command format - you must specify a number, not a word: increase (number)")
             except TypeError:
@@ -56,14 +56,19 @@ class ModifyCounter:
     def decrease(self, arguments):
         global modifier
         if arguments is None:
-            modifier -= 1
+            self.modify(-1)
         else:
             try:
-                modifier -= int(arguments[0])
+                self.modify(-(int(arguments[0])))
             except ValueError:
                 print("Invalid command format - you must specify a number, not a word: decrease (number)")
             except TypeError:
                 print("Invalid command format - you must specify a number, not a word: decrease (number)")
+
+    # A function to commit the change to the modifier
+    def modify(self, value):
+        global modifier
+        modifier += value
         if modifier < 0:
             print('Cannot decrease the increment below 0, so we\'re setting the increment to 0.')
             modifier = 0
