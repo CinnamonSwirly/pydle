@@ -33,27 +33,35 @@ class Modifier(threading.Thread):
 
 # A simple function to check what our counter is at.
 # Also shows how much the counter is increasing by.
-def check():
+def check(arguments):
     print(store)
     print('Increasing by '+str(modifier)+' per second')
 
 
 # A function to stop the program when called.
-def stop():
+def stop(arguments):
     os._exit(1)
 
 
 # A function to increase the modifier variable and make the counter go up faster.
 # TODO: Accept arguments
-def increase():
+def increase(arguments):
     global modifier
-    modifier += 1
+    if arguments is None:
+        modifier += 1
+    else:
+        try:
+            modifier += int(arguments[0])
+        except ValueError:
+            print("Invalid command format - you must specify a number, not a word: increase (number)")
+        except TypeError:
+            print("Invalid command format - you must specify a number, not a word: increase (number)")
 
 
 # A function to decrease the modifier variable and make the counter go up slower.
 # The function won't let the modifier variable go below zero.
 # TODO: Accept arguments
-def decrease():
+def decrease(arguments):
     global modifier
     if modifier >= 1:
         modifier -= 1
@@ -62,7 +70,7 @@ def decrease():
 
 
 # A function that will list all commands available in the dictionary commands
-def get_help():
+def get_help(arguments):
     for entry in help_explanations:
         print(entry)
 
@@ -77,7 +85,7 @@ def get_input():
         del command[0]
         commands[call_command](command)
     elif command[0] in commands:
-        commands[command[0]]()
+        commands[command[0]](None)
     else:
         print("Command not found. Please try again")
 
