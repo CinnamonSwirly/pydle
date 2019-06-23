@@ -44,7 +44,7 @@ def stop(arguments):
 
 
 # A function to increase the modifier variable and make the counter go up faster.
-# TODO: Accept arguments
+# It accepts arguments from get_input() and will take action on the first item in the arguments
 def increase(arguments):
     global modifier
     if arguments is None:
@@ -59,14 +59,21 @@ def increase(arguments):
 
 
 # A function to decrease the modifier variable and make the counter go up slower.
-# The function won't let the modifier variable go below zero.
-# TODO: Accept arguments
+# It accepts arguments from get_input() and will take action on the first item in the arguments
 def decrease(arguments):
     global modifier
-    if modifier >= 1:
+    if arguments is None:
         modifier -= 1
     else:
-        print('Cannot decrease the increment below 0!')
+        try:
+            modifier -= int(arguments[0])
+        except ValueError:
+            print("Invalid command format - you must specify a number, not a word: decrease (number)")
+        except TypeError:
+            print("Invalid command format - you must specify a number, not a word: decrease (number)")
+    if modifier <= 0:
+        print('Cannot decrease the increment below 0, so we\'re setting the increment to 0.')
+        modifier = 0
 
 
 # A function that will list all commands available in the dictionary commands
