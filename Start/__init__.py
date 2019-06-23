@@ -31,6 +31,44 @@ class Modifier(threading.Thread):
         modifier = 1
 
 
+# A class that will create and handle any modifiers to the counter.
+class ModifyCounter:
+    def __init__(self, name):
+        self.name = name
+        self.value = 1
+
+    # A function to increase the modifier variable and make the counter go up slower.
+    # It accepts arguments from get_input() and will take action on the first item in the arguments
+    def increase(self, arguments):
+        global modifier
+        if arguments is None:
+            modifier += 1
+        else:
+            try:
+                modifier += int(arguments[0])
+            except ValueError:
+                print("Invalid command format - you must specify a number, not a word: increase (number)")
+            except TypeError:
+                print("Invalid command format - you must specify a number, not a word: increase (number)")
+
+    # A function to decrease the modifier variable and make the counter go up slower.
+    # It accepts arguments from get_input() and will take action on the first item in the arguments
+    def decrease(self, arguments):
+        global modifier
+        if arguments is None:
+            modifier -= 1
+        else:
+            try:
+                modifier -= int(arguments[0])
+            except ValueError:
+                print("Invalid command format - you must specify a number, not a word: decrease (number)")
+            except TypeError:
+                print("Invalid command format - you must specify a number, not a word: decrease (number)")
+        if modifier < 0:
+            print('Cannot decrease the increment below 0, so we\'re setting the increment to 0.')
+            modifier = 0
+
+
 # A simple function to check what our counter is at.
 # Also shows how much the counter is increasing by.
 def check(arguments):
@@ -41,39 +79,6 @@ def check(arguments):
 # A function to stop the program when called.
 def stop(arguments):
     os._exit(1)
-
-
-# A function to increase the modifier variable and make the counter go up faster.
-# It accepts arguments from get_input() and will take action on the first item in the arguments
-def increase(arguments):
-    global modifier
-    if arguments is None:
-        modifier += 1
-    else:
-        try:
-            modifier += int(arguments[0])
-        except ValueError:
-            print("Invalid command format - you must specify a number, not a word: increase (number)")
-        except TypeError:
-            print("Invalid command format - you must specify a number, not a word: increase (number)")
-
-
-# A function to decrease the modifier variable and make the counter go up slower.
-# It accepts arguments from get_input() and will take action on the first item in the arguments
-def decrease(arguments):
-    global modifier
-    if arguments is None:
-        modifier -= 1
-    else:
-        try:
-            modifier -= int(arguments[0])
-        except ValueError:
-            print("Invalid command format - you must specify a number, not a word: decrease (number)")
-        except TypeError:
-            print("Invalid command format - you must specify a number, not a word: decrease (number)")
-    if modifier <= 0:
-        print('Cannot decrease the increment below 0, so we\'re setting the increment to 0.')
-        modifier = 0
 
 
 # A function that will list all commands available in the dictionary commands
@@ -97,12 +102,15 @@ def get_input():
         print("Command not found. Please try again")
 
 
+# Instantiating support class objects like the main modifier
+MainModifier = ModifyCounter('main')
+
 # A dictionary that gives us a list of references to functions
 commands = {
     "check": check,
     "exit": stop,
-    "increase": increase,
-    "decrease": decrease,
+    "increase": MainModifier.increase,
+    "decrease": MainModifier.decrease,
     "help": get_help
 }
 
