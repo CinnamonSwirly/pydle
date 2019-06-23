@@ -26,8 +26,12 @@ class Modifier(threading.Thread):
         self.name = name
 
     def run(self):
-        global modifier
-        modifier = 1
+        pass
+        
+        
+# Defining the modifier to the counter in the counterThread.       
+global modifier
+modifier = 1
 
 
 # A simple function to check what our counter is at.
