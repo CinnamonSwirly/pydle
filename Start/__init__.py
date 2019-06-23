@@ -4,6 +4,7 @@ import os
 
 
 # Let's make a thread class that will run our main counter
+# TODO: Show how much the counter is increasing per second
 class Counter(threading.Thread):
     def __init__(self, uid, name):
         threading.Thread.__init__(self)
@@ -54,12 +55,16 @@ def decrease():
 
 
 # A function that will get the user's input and, if the input matches a command, executes the command.
-# TODO: Pass data from the input into functions
+# The function collects user arguments as anything past the first word and passes the whole list to the function called.
 # TODO: Create a help command to list all commands
 def get_input():
-    print("Enter a command:")
+    print("Enter a command: ")
     command = input().split()
-    if command[0] in commands:
+    if len(command) >= 2 and command[0] in commands:
+        call_command = command[0]
+        del command[0]
+        commands[call_command](command)
+    elif command[0] in commands:
         commands[command[0]]()
     else:
         print("Command not found. Please try again")
@@ -70,7 +75,7 @@ commands = {
     "check": check,
     "exit": stop,
     "increase": increase,
-    "decrease":decrease
+    "decrease": decrease
 }
 
 # Create the threads
