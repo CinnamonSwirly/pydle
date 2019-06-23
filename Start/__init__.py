@@ -4,7 +4,6 @@ import os
 
 
 # Let's make a thread class that will run our main counter
-# TODO: Show how much the counter is increasing per second
 class Counter(threading.Thread):
     def __init__(self, uid, name):
         threading.Thread.__init__(self)
@@ -20,6 +19,7 @@ class Counter(threading.Thread):
 
 
 # This class will calculate the number by which we increment the central number in Counter
+# It is very simple right now, but as the calculations get heavier, a separate thread is best.
 class Modifier(threading.Thread):
     def __init__(self, uid, name):
         threading.Thread.__init__(self)
@@ -32,8 +32,10 @@ class Modifier(threading.Thread):
 
 
 # A simple function to check what our counter is at.
+# Also shows how much the counter is increasing by.
 def check():
     print(store)
+    print('Increasing by '+str(modifier)+' per second')
 
 
 # A function to stop the program when called.
@@ -102,7 +104,7 @@ help_explanations = [
 ModifierThread = Modifier(1, "Modifier")
 CounterThread = Counter(2, "Counter")
 
-# Start the threads
+# Start the threads - Modifier has to start first or else the modifier variable isn't defined for the counter.
 ModifierThread.start()
 CounterThread.start()
 
