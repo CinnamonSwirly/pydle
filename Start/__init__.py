@@ -26,12 +26,8 @@ class Modifier(threading.Thread):
         self.name = name
 
     def run(self):
-        pass
-        
-        
-# Defining the modifier to the counter in the counterThread.       
-global modifier
-modifier = 1
+        global modifier
+        modifier = 1
 
 
 # A simple function to check what our counter is at.
@@ -44,7 +40,22 @@ def stop():
     os._exit(1)
 
 
+# A function to increase the modifier variable and make the counter go up faster.
+def increase():
+    global modifier
+    modifier += 1
+
+
+# A function to decrease the modifier variable and make the counter go up slower.
+# TODO: Make it so the variable can't be decreased below 0.
+def decrease():
+    global modifier
+    modifier -= 1
+
+
 # A function that will get the user's input and, if the input matches a command, executes the command.
+# TODO: Pass data from the input into functions
+# TODO: Create a help command to list all commands
 def get_input():
     print("Enter a command:")
     command = input().split()
@@ -57,14 +68,16 @@ def get_input():
 # A dictionary that gives us a list of references to functions
 commands = {
     "check": check,
-    "exit": stop
+    "exit": stop,
+    "increase": increase,
+    "decrease":decrease
 }
 
 # Create the threads
 ModifierThread = Modifier(1, "Modifier")
 CounterThread = Counter(2, "Counter")
 
-# Start the threads - Modifier must start first to define the counter increment
+# Start the threads
 ModifierThread.start()
 CounterThread.start()
 
