@@ -48,10 +48,13 @@ def increase():
 
 
 # A function to decrease the modifier variable and make the counter go up slower.
-# TODO: Make it so the variable can't be decreased below 0.
+# The function won't let the modifier variable go below zero.
 def decrease():
     global modifier
-    modifier -= 1
+    if modifier >= 1:
+        modifier -= 1
+    else:
+        print('Cannot decrease the increment below 0!')
 
 
 # A function that will get the user's input and, if the input matches a command, executes the command.
