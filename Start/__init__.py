@@ -81,8 +81,15 @@ class Resources:
         self.quantity = 0
         self.cost = cost
 
-    def gather(self, amount):  # TODO: Why can't I gather more than one at a time?
+    def gather(self, amount):
         global core
+
+        try:
+            amount = int(amount)
+        except (TypeError, ValueError):
+            print('Improper syntax, proper example is: gather wood 2')
+            return
+
         if type(amount) is not int or amount <= 1:
             buyingquantity = 1
         else:
@@ -117,28 +124,30 @@ def get_help(arguments):
 
 
 # Let's save the progress of the counter
-def save(arguments):
+def save(arguments):  # TODO: SAVE RESOURCE COUNTS, CONVERT TO CSV FILE
     with open('pydle.sav', 'w+') as savefile:
         savefile.write(str(core))
 
 
 # Let's load the progress of the counter from the savefile
-def load(arguments):
+def load(arguments):  # TODO: CONVERT TO CSV FILE, LOAD RESOURCE AMOUNTS
     global core
     with open('pydle.sav', 'r+') as savefile:
         core = int(savefile.read())
 
 
 # Let's write a function to check syntax for gather and pass it to the right place.
-def gather(arguments):  # TODO: Process the second argument, if it exists as the quantity to gather
-    if arguments is None:
+def gather(arguments):
+    if arguments[0] in dictResources:
+        if arguments[1] is not None:
+            dictResources[arguments[0]].gather(arguments[1])
+        else:
+            dictResources[arguments[0]].gather(1)
+    else:
+        print('Invalid resource name.')
         print('Available resources to gather: ')
         for line in listResources:
             print(line)
-    elif arguments[0] in dictResources:
-        dictResources[arguments[0]].gather(1)
-    else:
-        print('Invalid resource name.')
 
 
 # A function that will get the user's input and, if the input matches a command, executes the command.
