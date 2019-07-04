@@ -81,14 +81,18 @@ class Resources:
         self.quantity = 0
         self.cost = cost
 
-    def gather(self):  # TODO: Why can't I gather more than one at a time?
+    def gather(self, amount):  # TODO: Why can't I gather more than one at a time?
         global core
-        if core >= self.cost:
-            self.quantity += 1
-            core -= self.cost
+        if type(amount) is not int or amount <= 1:
+            buyingquantity = 1
+        else:
+            buyingquantity = amount
+        if core >= (self.cost * buyingquantity):
+            self.quantity += buyingquantity
+            core -= (self.cost * buyingquantity)
         else:
             print('You don\'t have enough money!')
-            print('This '+self.name+' costs '+str(self.cost)+', but you only have '+str(core)+'.')
+            print('This '+self.name+' costs '+str(self.cost * buyingquantity)+', but you only have '+str(core)+'.')
 
 
 # A simple function to check what our counter is at.
@@ -96,7 +100,9 @@ class Resources:
 def check(arguments):
     print('Money: '+str(core))
     print('Increasing by '+str(modifier)+' per second')
-    print('Resources: ')  # TODO: ADD RESOURCES AS ALL MEMBERS OF A CLASS BEING PRINTED
+    print('Resources: ')
+    for line in listResources:
+        print(line + " : " + str(dictResources[line].quantity))
 
 
 # A function to stop the program when called.
@@ -130,7 +136,7 @@ def gather(arguments):  # TODO: Process the second argument, if it exists as the
         for line in listResources:
             print(line)
     elif arguments[0] in dictResources:
-        dictResources[arguments[0]].gather()
+        dictResources[arguments[0]].gather(1)
     else:
         print('Invalid resource name.')
 
