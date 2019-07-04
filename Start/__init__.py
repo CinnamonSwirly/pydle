@@ -140,6 +140,8 @@ help_explanations = [
     "exit: exit the program",
     "increase: increase the increment of the counter",
     "decrease: decrease the increment of the counter",
+    "save: save the counter\'s value",
+    "load: load the counter\'s value",
     "help: what you\'re looking at right now"
 ]
 
