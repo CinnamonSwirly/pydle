@@ -11,10 +11,10 @@ class Counter(threading.Thread):
         self.name = name
 
     def run(self):
-        global store
-        store = 0
+        global core
+        core = 0
         while True:
-            store += modifier
+            core += modifier
             time.sleep(1)
 
 
@@ -74,11 +74,29 @@ class ModifyCounter:
             modifier = 0
 
 
+# Let's create a class for resources so you can perform the same actions on different resources
+class Resources:
+    def __init__(self, name, cost):
+        self.name = name
+        self.quantity = 0
+        self.cost = cost
+
+    def gather(self):  # TODO: Why can't I gather more than one at a time?
+        global core
+        if core >= self.cost:
+            self.quantity += 1
+            core -= self.cost
+        else:
+            print('You don\'t have enough money!')
+            print('This '+self.name+' costs '+str(self.cost)+', but you only have '+str(core)+'.')
+
+
 # A simple function to check what our counter is at.
 # Also shows how much the counter is increasing by.
 def check(arguments):
-    print(store)
+    print('Money: '+str(core))
     print('Increasing by '+str(modifier)+' per second')
+    print('Resources: ')  # TODO: ADD RESOURCES AS ALL MEMBERS OF A CLASS BEING PRINTED
 
 
 # A function to stop the program when called.
@@ -95,14 +113,26 @@ def get_help(arguments):
 # Let's save the progress of the counter
 def save(arguments):
     with open('pydle.sav', 'w+') as savefile:
-        savefile.write(str(store))
+        savefile.write(str(core))
 
 
 # Let's load the progress of the counter from the savefile
 def load(arguments):
-    global store
+    global core
     with open('pydle.sav', 'r+') as savefile:
-        store = int(savefile.read())
+        core = int(savefile.read())
+
+
+# Let's write a function to check syntax for gather and pass it to the right place.
+def gather(arguments):  # TODO: Process the second argument, if it exists as the quantity to gather
+    if arguments is None:
+        print('Available resources to gather: ')
+        for line in listResources:
+            print(line)
+    elif arguments[0] in dictResources:
+        dictResources[arguments[0]].gather()
+    else:
+        print('Invalid resource name.')
 
 
 # A function that will get the user's input and, if the input matches a command, executes the command.
@@ -131,7 +161,21 @@ commands = {
     "decrease": MainModifier.decrease,
     "help": get_help,
     "save": save,
+    "gather": gather,
     "load": load
+}
+
+# Instantiate all resources for the Resources class
+wood = Resources('wood', 100)
+
+# A list of resources
+listResources = [
+    'wood'
+]
+
+# A dictionary of the referenced class objects for resources
+dictResources = {
+    "wood": wood
 }
 
 # A list based on the command dictionary that gives short descriptions of the commands available.
@@ -142,6 +186,7 @@ help_explanations = [
     "decrease: decrease the increment of the counter",
     "save: save the counter\'s value",
     "load: load the counter\'s value",
+    "gather: use your energy to gather materials. Available materials: wood"
     "help: what you\'re looking at right now"
 ]
 
