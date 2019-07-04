@@ -1,6 +1,7 @@
 import threading
 import time
 import os
+import csv
 
 
 # Let's make a thread class that will run our main counter
@@ -124,22 +125,32 @@ def get_help(arguments):
 
 
 # Let's save the progress of the counter
-def save(arguments):  # TODO: SAVE RESOURCE COUNTS, CONVERT TO CSV FILE
+def save(arguments):
+    savedata = [core]
+    for resource in dictResources:
+        savedata.append(dictResources[resource].quantity)
     with open('pydle.sav', 'w+') as savefile:
-        savefile.write(str(core))
+        savewriter = csv.writer(savefile, delimiter='+')
+        savewriter.writerow(savedata)
 
 
 # Let's load the progress of the counter from the savefile
-def load(arguments):  # TODO: CONVERT TO CSV FILE, LOAD RESOURCE AMOUNTS
+def load(arguments):
     global core
     with open('pydle.sav', 'r+') as savefile:
-        core = int(savefile.read())
+        readdata = csv.reader(savefile, delimiter='+')
+        for row in readdata:  # NOTE: If you add another row, you'll need to change this...
+            core = int(row[0])
+            del row[0]
+            for i in range(len(row)):
+                for resource in dictResources:
+                    dictResources[resource].quantity = int(row[i])
 
 
 # Let's write a function to check syntax for gather and pass it to the right place.
 def gather(arguments):
     if arguments[0] in dictResources:
-        if arguments[1] is not None:
+        if len(arguments) >= 2:
             dictResources[arguments[0]].gather(arguments[1])
         else:
             dictResources[arguments[0]].gather(1)
