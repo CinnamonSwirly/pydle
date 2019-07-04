@@ -92,6 +92,19 @@ def get_help(arguments):
         print(entry)
 
 
+# Let's save the progress of the counter
+def save(arguments):
+    with open('pydle.sav', 'w+') as savefile:
+        savefile.write(str(store))
+
+
+# Let's load the progress of the counter from the savefile
+def load(arguments):
+    global store
+    with open('pydle.sav', 'r+') as savefile:
+        store = int(savefile.read())
+
+
 # A function that will get the user's input and, if the input matches a command, executes the command.
 # The function collects user arguments as anything past the first word and passes the whole list to the function called.
 def get_input():
@@ -116,7 +129,9 @@ commands = {
     "exit": stop,
     "increase": MainModifier.increase,
     "decrease": MainModifier.decrease,
-    "help": get_help
+    "help": get_help,
+    "save": save,
+    "load": load
 }
 
 # A list based on the command dictionary that gives short descriptions of the commands available.
